@@ -23,6 +23,9 @@ env:
 jobs:
   build-api:
     runs-on: ubuntu-latest
+    env:
+      CAS_CLIENT_ID: ${{ secrets.CAS_CLIENT_ID }}
+      CAS_CLIENT_SECRET: ${{ secrets.CAS_CLIENT_SECRET }}
     steps:
       - id: setup
         name: Setup
