@@ -20,7 +20,14 @@ RUN sed -i '/<policy domain="coder" rights="none" pattern="PDF" \/>/d' \
 
 COPY api /opt/manifold/api
 WORKDIR /opt/manifold/api
+
+ARG CAS_CLIENT_ID
+ARG CAS_CLIENT_SECRET
+
+ENV CAS_CLIENT_ID=${CAS_CLIENT_ID}
+ENV CAS_CLIENT_SECRET=${CAS_CLIENT_SECRET}
 ENV RAILS_LOG_TO_STDOUT=1
+
 RUN envsubst < config/oauth.tmpl.yml > config/oauth.yml
 RUN gem install bundler:2.2.19
 RUN bundle install

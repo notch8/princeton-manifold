@@ -23,9 +23,6 @@ env:
 jobs:
   build-api:
     runs-on: ubuntu-latest
-    env:
-      CAS_CLIENT_ID: ${{ secrets.CAS_CLIENT_ID }}
-      CAS_CLIENT_SECRET: ${{ secrets.CAS_CLIENT_SECRET }}
     steps:
       - id: setup
         name: Setup
@@ -54,12 +51,20 @@ jobs:
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
       - name: Build and push API
-        uses: scientist-softserv/actions/build-and-push@v0.0.22
-        with:
-          type: api_rails
-          location: /api
-          subdir: .
-          tags: ${{ steps.meta-api.outputs.tags }}
+        env:
+          BUILD_TYPE: api_rails
+          BUILD_LOCATION: /api
+          TAGS: ${{ steps.meta-api.outputs.tags }}
+        shell: bash
+        run: |
+          TAG=latest docker compose pull ${BUILD_TYPE} || true
+          docker compose build \
+            --build-arg CAS_CLIENT_ID=${{ secrets.CAS_CLIENT_ID }} \
+            --build-arg CAS_CLIENT_SECRET=${{ secrets.CAS_CLIENT_SECRET }} \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            ${BUILD_TYPE}
+          docker compose push ${BUILD_TYPE}
+          ruby -e "ENV.fetch('TAGS', []).split(',').each {|tag| %x{docker tag #{ENV['REGISTRY']}/#{ENV['REPO_LOWER']}#{ENV['BUILD_LOCATION']}:#{ENV['TAG']} #{ENV['REGISTRY']}/#{ENV['REPO_LOWER']}#{ENV['BUILD_LOCATION']}:#{tag}}; %x{docker push #{ENV['REGISTRY']}/#{ENV['REPO_LOWER']}#{ENV['BUILD_LOCATION']}:#{tag}}}"
 
   build-client:
     runs-on: ubuntu-latest
