@@ -54,13 +54,15 @@ jobs:
         env:
           BUILD_TYPE: api_rails
           BUILD_LOCATION: /api
+          CAS_CLIENT_ID: ${{ secrets.CAS_CLIENT_ID }}
+          CAS_CLIENT_SECRET: ${{ secrets.CAS_CLIENT_SECRET }}
           TAGS: ${{ steps.meta-api.outputs.tags }}
         shell: bash
         run: |
           TAG=latest docker compose pull ${BUILD_TYPE} || true
           docker compose build \
-            --build-arg CAS_CLIENT_ID=${{ secrets.CAS_CLIENT_ID }} \
-            --build-arg CAS_CLIENT_SECRET=${{ secrets.CAS_CLIENT_SECRET }} \
+            --build-arg CAS_CLIENT_ID=$CAS_CLIENT_ID \
+            --build-arg CAS_CLIENT_SECRET=$CAS_CLIENT_SECRET \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             ${BUILD_TYPE}
           docker compose push ${BUILD_TYPE}
