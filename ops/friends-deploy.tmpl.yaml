@@ -6,7 +6,7 @@ imagePullSecrets:
 volumes:
   - name: shared-storage
     persistentVolumeClaim:
-      claimName: princeton-manifold-production-shared-pvc
+      claimName: princeton-manifold-friends-shared-pvc
 
 resources:
   limits:
@@ -24,7 +24,7 @@ readinessProbe:
 ingress:
   enabled: true
   hosts:
-    - host: openpublishing.princeton.edu
+    - host: princeton-manifold-friends.notch8.cloud
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -34,22 +34,28 @@ ingress:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
   tls:
     - hosts:
-        - openpublishing.princeton.edu
-      secretName: production-princeton-manifold-tls
+        - princeton-manifold-friends.notch8.cloud
+      secretName: friends-princeton-manifold-tls
 
 api:
   rails:
-    replicaCount: 2
-    host: princeton-manifold-production-api-rails
+    host: princeton-manifold-friends-api-rails
   cable:
-    host: princeton-manifold-production-api-cable
+    host: princeton-manifold-friends-api-cable
+  sidekiq:
+    resources:
+      limits:
+        memory: "12Gi"
+        cpu: "2"
+      requests:
+        memory: "2Gi"
+        cpu: "300m"
 
 client:
-  replicaCount: 2
-  browserApiCableUrl: https://openpublishing.princeton.edu/cable
-  browserApiUrl: https://openpublishing.princeton.edu
-  serverApiUrl: http://princeton-manifold-production-api-rails:3020
-  serverHost: princeton-manifold-production-client
+  browserApiCableUrl: https://princeton-manifold-friends.notch8.cloud/cable
+  browserApiUrl: https://princeton-manifold-friends.notch8.cloud
+  serverApiUrl: http://princeton-manifold-friends-api-rails:3020
+  serverHost: princeton-manifold-friends-client
 
 redis:
   enabled: true
@@ -58,9 +64,9 @@ redis:
     password: $REDIS_PASSWORD # FIXME need to set
 
 env:
-  domain: openpublishing.princeton.edu
-  elasticsearchUrl: http://princeton-manifold-production-es:9200
-  railsDbHost: princeton-manifold-production-postgresql
+  domain: princeton-manifold-friends.notch8.cloud
+  elasticsearchUrl: http://princeton-manifold-friends-es:9200
+  railsDbHost: princeton-manifold-friends-postgresql
   railsSecretKey: $SECRET_KEY_BASE
 
 postgresql:
@@ -69,7 +75,7 @@ postgresql:
     repository: bitnami/postgresql
     tag: 14.5.0-debian-11-r35
   auth:
-    database: princeton_manifold_production
+    database: princeton_manifold_friends
     password: $DB_PASSWORD
     username: princeton_manifold
   containerPorts:
