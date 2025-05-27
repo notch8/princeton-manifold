@@ -38,10 +38,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "princeton-manifold.fullname" . }}-env
-          {{- with .Values.api.sidekiq.resources }}
             resources:
-              {{- toYaml . | nindent 12 }}
-          {{- end }}
+              {{- toYaml .Values.api.sidekiq.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
