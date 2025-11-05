@@ -39,9 +39,9 @@ ingress:
 
 api:
   rails:
-    host: princeton-manifold-friends-api-rails
+    host: princeton-manifold-friends-api-rails.princeton-manifold-friends.svc.cluster.local
   cable:
-    host: princeton-manifold-friends-api-cable
+    host: princeton-manifold-friends-api-cable.princeton-manifold-friends.svc.cluster.local
   sidekiq:
     resources:
       limits:
@@ -54,8 +54,8 @@ api:
 client:
   browserApiCableUrl: https://princeton-manifold-friends.notch8.cloud/cable
   browserApiUrl: https://princeton-manifold-friends.notch8.cloud
-  serverApiUrl: http://princeton-manifold-friends-api-rails:3020
-  serverHost: princeton-manifold-friends-client
+  serverApiUrl: http://princeton-manifold-friends-api-rails.princeton-manifold-friends.svc.cluster.local:3020
+  serverHost: princeton-manifold-friends-client.princeton-manifold-friends.svc.cluster.local
 
 elasticsearch:
   image:
@@ -73,8 +73,8 @@ redis:
 
 env:
   domain: princeton-manifold-friends.notch8.cloud
-  elasticsearchUrl: http://princeton-manifold-friends-es:9200
-  railsDbHost: princeton-manifold-friends-postgresql
+  elasticsearchUrl: http://princeton-manifold-friends-es.princeton-manifold-friends.svc.cluster.local:9200
+  railsDbHost: princeton-manifold-friends-postgresql.princeton-manifold-friends.svc.cluster.local
   railsSecretKey: $SECRET_KEY_BASE
   sentryDsn: $SENTRY_DSN
   sentryEnvironment: $SENTRY_ENVIRONMENT

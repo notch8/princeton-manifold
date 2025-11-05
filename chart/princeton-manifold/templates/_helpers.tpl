@@ -70,7 +70,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "princeton-manifold.redis.host" -}}
-{{- printf "%s-master" (include "princeton-manifold.redis.fullname" .) -}}
+{{- printf "%s-master.%s.svc.cluster.local" (include "princeton-manifold.redis.fullname" .) .Release.Namespace -}}
 {{- end -}}
 
 {{- define "princeton-manifold.redis.url" -}}
