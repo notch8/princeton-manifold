@@ -17,7 +17,6 @@ ENV MAMMOTH_PATH=/usr/lib/node_modules/mammoth/bin/mammoth
 
 RUN sed -i '/<policy domain="coder" rights="none" pattern="PDF" \/>/d' \
     /etc/ImageMagick-6/policy.xml
-
 COPY api /opt/manifold/api
 WORKDIR /opt/manifold/api
 ENV RAILS_LOG_TO_STDOUT=1
@@ -38,16 +37,26 @@ RUN apt-get install -y vim less
 COPY client /opt/manifold/client
 WORKDIR /opt/manifold/client
 RUN yarn install
+
+# Clear SSR config so build uses the correct URLs
 RUN cat /dev/null > /opt/manifold/client/dist/manifold/ssr/ssr.config.js
 
 # NOTE: These are production values. They get overwritten locally. They are required to
 #       be in the image because `yarn run build` uses them to populate browser.config.js.
 #       @see client/script/build-browser-config.js
-ENV CLIENT_BROWSER_API_CABLE_URL="https://openpublishing.princeton.edu/cable"
-ENV CLIENT_BROWSER_API_URL="https://openpublishing.princeton.edu"
-ENV DOMAIN="openpublishing.princeton.edu"
+
+# Accept build-time args for URLs
+ARG CLIENT_BROWSER_API_URL
+ARG CLIENT_BROWSER_API_CABLE_URL
+ARG DOMAIN
+
+ENV CLIENT_BROWSER_API_URL=${CLIENT_BROWSER_API_URL:-"https://openpublishing.princeton.edu"}
+ENV CLIENT_BROWSER_API_CABLE_URL=${CLIENT_BROWSER_API_CABLE_URL:-"https://openpublishing.princeton.edu/cable"}
+ENV DOMAIN=${DOMAIN:-"openpublishing.princeton.edu"}
 ENV SSL_ENABLED="true"
 ENV NODE_OPTIONS=--openssl-legacy-provider
+
+# Build the client bundle
 RUN yarn run build
 
 ####################################################################################################
