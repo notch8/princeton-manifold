@@ -30,9 +30,11 @@ spec:
       containers:
         - name: client
           command:
-            - yarn
-            - run
-            - start
+            - sh
+            - -c
+            - |
+              yarn install
+              yarn run start
           ports:
             - containerPort: 3010
           securityContext:
