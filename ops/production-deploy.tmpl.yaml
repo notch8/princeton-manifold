@@ -15,7 +15,7 @@ readinessProbe:
 
 ingress:
   enabled: true
-  ingressClassName: "nginx-ingress"
+  className: "nginx-ingress"
   hosts:
     - host: openpublishing.princeton.edu
       paths:
