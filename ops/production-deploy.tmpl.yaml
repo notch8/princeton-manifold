@@ -21,12 +21,17 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
+    - host: princeton-manifold-origin.notch8.cloud
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
   annotations:
     nginx.org/client-max-body-size: "0"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
   tls:
     - hosts:
         - openpublishing.princeton.edu
+        - princeton-manifold-origin.notch8.cloud
       secretName: production-princeton-manifold-tls
 
 api:
