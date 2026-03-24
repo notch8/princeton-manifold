@@ -1,0 +1,29 @@
+{{- if .Values.originIngress.enabled -}}
+{{- $fullName := include "princeton-manifold.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}-origin
+  labels:
+    {{- include "princeton-manifold.labels" . | nindent 4 }}
+  {{- with .Values.originIngress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.originIngress.className }}
+  ingressClassName: {{ .Values.originIngress.className }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.originIngress.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ $fullName }}-nginx
+                port:
+                  number: {{ $svcPort }}
+{{- end }}

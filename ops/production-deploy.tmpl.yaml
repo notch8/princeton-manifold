@@ -15,23 +15,27 @@ readinessProbe:
 
 ingress:
   enabled: true
+  className: "nginx-ingress"
   hosts:
     - host: openpublishing.princeton.edu
       paths:
         - path: /
           pathType: ImplementationSpecific
-    - host: princeton-manifold-origin.notch8.cloud
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
   annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.org/client-max-body-size: "0"
+    nginx.org/mergeable-ingress-type: "master"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx-ingress"
   tls:
     - hosts:
         - openpublishing.princeton.edu
       secretName: production-princeton-manifold-tls
+
+originIngress:
+  enabled: true
+  className: "nginx-ingress"
+  host: princeton-manifold-origin.notch8.cloud
+  annotations:
+    nginx.org/client-max-body-size: "0"
 
 api:
   rails:
