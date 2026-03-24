@@ -20,6 +20,10 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
+    - host: princeton-manifold-origin.notch8.cloud
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
@@ -27,6 +31,7 @@ ingress:
   tls:
     - hosts:
         - openpublishing.princeton.edu
+        - princeton-manifold-origin.notch8.cloud
       secretName: production-princeton-manifold-tls
 
 api:
