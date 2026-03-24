@@ -31,7 +31,6 @@ ingress:
   tls:
     - hosts:
         - openpublishing.princeton.edu
-        - princeton-manifold-origin.notch8.cloud
       secretName: production-princeton-manifold-tls
 
 api:
