@@ -1,7 +1,4 @@
-autoscaling:
-  enabled: true
-  minReplicas: 0
-  maxReplicas: 2
+replicaCount: 1
 
 imagePullSecrets:
   - name: github
