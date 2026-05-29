@@ -32,6 +32,8 @@ ingress:
           pathType: ImplementationSpecific
   annotations:
     nginx.org/client-max-body-size: "0"
+    nginx.org/proxy-read-timeout: "600"
+    nginx.org/proxy-send-timeout: "600"
     cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx-ingress"
   tls:
     # TODO: We can remove princeton-manifold-origin.notch8.cloud only after Cloudflare
