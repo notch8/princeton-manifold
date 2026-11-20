@@ -56,18 +56,18 @@ RUN yarn run build
 # Originally copied from:
 # - github.com/ManifoldScholar/manifold-docker-build/blob/v8.1.1/dockerfiles/manifold-nginx/Dockerfile
 ####################################################################################################
-FROM nginx:1.25 AS manifold-nginx
+FROM nginx/nginx-unprivileged:1.31.9-alpine as manifold-nginx
 
 RUN apt-get -o Acquire::Check-Valid-Until=false update
 RUN apt-get install -y openssl
 
-COPY nginx/config/default.conf.template /etc/nginx/templates/default.conf.template
+COPY --chown=101:101 nginx/config/default.conf.template /etc/nginx/templates/default.conf.template
 
-COPY nginx/includes/manifold-client-local /etc/nginx/includes/manifold-client-local
-COPY nginx/includes/manifold-server-local /etc/nginx/includes/manifold-server-local
+COPY --chown=101:101 nginx/includes/manifold-client-local /etc/nginx/includes/manifold-client-local
+COPY --chown=101:101 nginx/includes/manifold-server-local /etc/nginx/includes/manifold-server-local
 
-COPY nginx/scripts/install-self-signed-cert /usr/local/bin/install-self-signed-cert
-COPY nginx/scripts/start-nginx /usr/local/bin/start-nginx
+COPY --chown=101:101 nginx/scripts/install-self-signed-cert /usr/local/bin/install-self-signed-cert
+COPY --chown=101:101 nginx/scripts/start-nginx /usr/local/bin/start-nginx
 
 VOLUME ["/manifold_sockets","/manifold_data"]
 
