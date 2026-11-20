@@ -74,8 +74,8 @@ api:
   sidekiq:
     resources:
       limits:
-        memory: "16Gi"
-        cpu: "1000m"
+        memory: "24Gi"
+        cpu: "2000m"
       requests:
         memory: "5Gi"
         cpu: "400m"
