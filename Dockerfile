@@ -5,6 +5,9 @@
 # - github.com/ManifoldScholar/manifold-docker-build/blob/v8.1.1/dockerfiles/manifold-api/Dockerfile
 ####################################################################################################
 FROM ruby:2.7.8 AS manifold-api
+# bullseye dropped off deb.debian.org's live mirrors once its security support
+# window ended - archive.debian.org keeps every release's packages forever.
+RUN sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list
 RUN apt-get -o Acquire::Check-Valid-Until=false update
 RUN apt-get install -y libicu-dev postgresql-client nano curl software-properties-common ghostscript \
     vim less
@@ -56,7 +59,7 @@ RUN yarn run build
 # Originally copied from:
 # - github.com/ManifoldScholar/manifold-docker-build/blob/v8.1.1/dockerfiles/manifold-nginx/Dockerfile
 ####################################################################################################
-FROM nginx/nginx-unprivileged:1.31.9-alpine as manifold-nginx
+FROM nginx:1.31.9 AS manifold-nginx
 
 RUN apt-get -o Acquire::Check-Valid-Until=false update
 RUN apt-get install -y openssl
