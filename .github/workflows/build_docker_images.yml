@@ -22,7 +22,7 @@ env:
 
 jobs:
   build-api:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - id: setup
         name: Setup
@@ -59,7 +59,7 @@ jobs:
           tags: ${{ steps.meta-api.outputs.tags }}
 
   build-client:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - id: setup
         name: Setup
@@ -96,7 +96,7 @@ jobs:
           tags: ${{ steps.meta-client.outputs.tags }}
 
   build-nginx:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - id: setup
         name: Setup
