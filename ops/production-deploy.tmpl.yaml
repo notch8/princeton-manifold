@@ -29,9 +29,10 @@ ingress:
     - host: princeton-manifold-origin.notch8.cloud
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
   annotations:
     nginx.org/client-max-body-size: "0"
+    nginx.org/proxy-connect-timeout: "60"
     nginx.org/proxy-read-timeout: "600"
     nginx.org/proxy-send-timeout: "600"
     cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx-ingress"
@@ -42,7 +43,7 @@ ingress:
     - hosts:
         - openpublishing.princeton.edu
         - princeton-manifold-origin.notch8.cloud
-      secretName: production-princeton-manifold-tls
+      secretName: production-princeton-manifold-tls-4
 api:
   rails:
     replicaCount: 2
