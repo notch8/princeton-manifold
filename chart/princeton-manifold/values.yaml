@@ -97,6 +97,22 @@ api:
   rails:
     replicaCount: 1
     host: ""
+    probes:
+      startup:
+        httpGet: {path: /api/v1/settings, port: 3020}
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 30
+      liveness:
+        httpGet: {path: /api/v1/settings, port: 3020}
+        periodSeconds: 20
+        timeoutSeconds: 10
+        failureThreshold: 6
+      readiness:
+        httpGet: {path: /api/v1/settings, port: 3020}
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 3
   cable:
     host: ""
 client:
@@ -109,15 +125,48 @@ client:
   browserApiUrl: ""
   serverApiUrl: ""
   serverHost: ""
+  # /browser.config.js is served by the SSR process from the file the start command regenerates.
+  probes:
+    startup:
+      httpGet: {path: /browser.config.js, port: 3010}
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 60
+    liveness:
+      httpGet: {path: /browser.config.js, port: 3010}
+      periodSeconds: 20
+      timeoutSeconds: 10
+      failureThreshold: 6
+    readiness:
+      httpGet: {path: /browser.config.js, port: 3010}
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
 
+nginx:
+  # TCP only: any HTTP path through nginx also depends on the client and API pods.
+  probes:
+    startup:
+      tcpSocket: {port: 80}
+      periodSeconds: 5
+      failureThreshold: 24
+    liveness:
+      tcpSocket: {port: 80}
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 6
+    readiness:
+      tcpSocket: {port: 80}
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+
+startupProbe:
+  enabled: false
 livenessProbe:
-  httpGet:
-    path: /
-    port: http
+  enabled: false
 readinessProbe:
-  httpGet:
-    path: /
-    port: http
+  enabled: false
 
 autoscaling:
   enabled: false

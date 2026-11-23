@@ -8,10 +8,12 @@ volumes:
     persistentVolumeClaim:
       claimName: princeton-manifold-friends-shared-pvc
 
+startupProbe:
+  enabled: true
 livenessProbe:
-  enabled: false
+  enabled: true
 readinessProbe:
-  enabled: false
+  enabled: true
 
 ingress:
   enabled: true

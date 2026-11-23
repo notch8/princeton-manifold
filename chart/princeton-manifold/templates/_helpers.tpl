@@ -76,3 +76,21 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "princeton-manifold.redis.url" -}}
 {{- printf "redis://:%s@%s:%s" .Values.redis.auth.password (include "princeton-manifold.redis.host" .) "6379/0" -}}
 {{- end -}}
+
+{{/*
+Probes for a component: include with (dict "root" $ "probes" .Values.<component>.probes)
+*/}}
+{{- define "princeton-manifold.probes" -}}
+{{- if .root.Values.startupProbe.enabled }}
+startupProbe:
+  {{- toYaml .probes.startup | nindent 2 }}
+{{- end }}
+{{- if .root.Values.livenessProbe.enabled }}
+livenessProbe:
+  {{- toYaml .probes.liveness | nindent 2 }}
+{{- end }}
+{{- if .root.Values.readinessProbe.enabled }}
+readinessProbe:
+  {{- toYaml .probes.readiness | nindent 2 }}
+{{- end }}
+{{- end -}}

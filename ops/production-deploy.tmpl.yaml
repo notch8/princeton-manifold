@@ -8,6 +8,8 @@ volumes:
     persistentVolumeClaim:
       claimName: princeton-manifold-production-shared-pvc
 
+startupProbe:
+  enabled: false
 livenessProbe:
   enabled: false
 readinessProbe:
