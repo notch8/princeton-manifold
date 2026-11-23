@@ -32,7 +32,7 @@ spec:
           command:
             - yarn
             - run
-            - start
+            - start-docker
           ports:
             - containerPort: 3010
           securityContext:

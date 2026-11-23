@@ -43,9 +43,7 @@ WORKDIR /opt/manifold/client
 RUN yarn install
 RUN cat /dev/null > /opt/manifold/client/dist/manifold/ssr/ssr.config.js
 
-# NOTE: These are production values. They get overwritten locally. They are required to
-#       be in the image because `yarn run build` uses them to populate browser.config.js.
-#       @see client/script/build-browser-config.js
+# Build-time defaults only: `yarn run start-docker` rewrites browser.config.js from the container's env.
 ENV CLIENT_BROWSER_API_CABLE_URL="https://openpublishing.princeton.edu/cable"
 ENV CLIENT_BROWSER_API_URL="https://openpublishing.princeton.edu"
 ENV DOMAIN="openpublishing.princeton.edu"
