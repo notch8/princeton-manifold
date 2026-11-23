@@ -15,6 +15,9 @@ livenessProbe:
 readinessProbe:
   enabled: false
 
+migrations:
+  enabled: false
+
 ingress:
   className: "nginx-ingress"
   enabled: true

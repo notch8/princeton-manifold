@@ -143,6 +143,12 @@ client:
       timeoutSeconds: 5
       failureThreshold: 3
 
+# pre-upgrade hook Job: db:migrate then manifold:upgrade
+migrations:
+  enabled: false
+  activeDeadlineSeconds: 840
+  resources: {}
+
 nginx:
   # TCP only: any HTTP path through nginx also depends on the client and API pods.
   probes:
