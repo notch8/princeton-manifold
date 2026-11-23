@@ -36,6 +36,8 @@ ingress:
     nginx.org/proxy-read-timeout: "600"
     nginx.org/proxy-send-timeout: "600"
     cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx-ingress"
+    # nginx-ingress drops a second Ingress for the same host, so the HTTP-01 path must be added to this one.
+    acme.cert-manager.io/http01-edit-in-place: "true"
   tls:
     # TODO: We can remove princeton-manifold-origin.notch8.cloud only after Cloudflare
     # no longer sends that hostname as the upstream SNI value for this custom hostname.
