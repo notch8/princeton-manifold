@@ -30,9 +30,9 @@ spec:
       containers:
         - name: client
           command:
-            - yarn
-            - run
-            - start-docker
+            - ./node_modules/.bin/npm-run-all
+            - _build:browser-config
+            - _serve:ssr
           ports:
             - containerPort: 3010
           securityContext:
