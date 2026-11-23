@@ -17,7 +17,7 @@ env:
 jobs:
   client-lint:
     if: github.event.pull_request.draft == false
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: "Checkout code"
@@ -32,7 +32,7 @@ jobs:
   client-tests:
     if: github.event.pull_request.draft == false
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: "Checkout code"
@@ -47,7 +47,7 @@ jobs:
   api-lint:
     if: github.event.pull_request.draft == false
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: "Checkout code"
@@ -62,7 +62,7 @@ jobs:
   api-tests:
     if: github.event.pull_request.draft == false
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
