@@ -15,7 +15,7 @@ readinessProbe:
 
 ingress:
   enabled: true
-  ingressClassName: "nginx-ingress"
+  className: "nginx-ingress"
   hosts:
     - host: princeton-manifold-friends.notch8.cloud
       paths:
