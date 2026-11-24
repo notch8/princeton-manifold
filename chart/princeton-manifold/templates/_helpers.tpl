@@ -76,3 +76,53 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "princeton-manifold.redis.url" -}}
 {{- printf "redis://:%s@%s:%s" .Values.redis.auth.password (include "princeton-manifold.redis.host" .) "6379/0" -}}
 {{- end -}}
+
+{{/*
+Probes for a component: include with (dict "root" $ "probes" .Values.<component>.probes)
+*/}}
+{{- define "princeton-manifold.probes" -}}
+{{- if .root.Values.startupProbe.enabled }}
+startupProbe:
+  {{- toYaml .probes.startup | nindent 2 }}
+{{- end }}
+{{- if .root.Values.livenessProbe.enabled }}
+livenessProbe:
+  {{- toYaml .probes.liveness | nindent 2 }}
+{{- end }}
+{{- if .root.Values.readinessProbe.enabled }}
+readinessProbe:
+  {{- toYaml .probes.readiness | nindent 2 }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Env ConfigMap data, shared with the pre-upgrade hook copy
+*/}}
+{{- define "princeton-manifold.envData" -}}
+ALLOW_SIGNUP: "false"
+API_CABLE_HOST: {{ .Values.api.cable.host }}
+API_CABLE_PORT: "3021"
+API_HOST: {{ .Values.api.rails.host }}
+API_PORT: "3020"
+CLIENT_BROWSER_API_CABLE_URL: {{ .Values.client.browserApiCableUrl }}
+CLIENT_BROWSER_API_URL: {{ .Values.client.browserApiUrl }}
+CLIENT_SERVER_API_URL: {{ .Values.client.serverApiUrl }}
+CLIENT_SERVER_HOST: {{ .Values.client.serverHost }}
+CLIENT_SERVER_PORT: "3010"
+CLIENT_SERVER_PROXIES: "true"
+DOMAIN: {{ .Values.env.domain }}
+ELASTICSEARCH_URL: {{ .Values.env.elasticsearchUrl }}
+NODE_ENV: production
+RAILS_DB_HOST: {{ .Values.env.railsDbHost }}
+RAILS_DB_NAME: {{ .Values.postgresql.auth.database }}
+RAILS_DB_PASS: {{ .Values.postgresql.auth.password }}
+RAILS_DB_PORT: "5432"
+RAILS_DB_USER: {{ .Values.postgresql.auth.username }}
+RAILS_ENV: production
+RAILS_REDIS_URL: {{ template "princeton-manifold.redis.url" . }}
+RAILS_SECRET_KEY: {{ .Values.env.railsSecretKey }}
+REDIS_URL: {{ template "princeton-manifold.redis.url" . }}
+SENTRY_DSN: {{ .Values.env.sentryDsn }}
+SENTRY_ENVIRONMENT: {{ .Values.env.sentryEnvironment }}
+SSL_ENABLED: "true"
+{{- end -}}

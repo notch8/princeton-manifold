@@ -8,14 +8,19 @@ volumes:
     persistentVolumeClaim:
       claimName: princeton-manifold-friends-shared-pvc
 
+startupProbe:
+  enabled: true
 livenessProbe:
-  enabled: false
+  enabled: true
 readinessProbe:
-  enabled: false
+  enabled: true
+
+migrations:
+  enabled: true
 
 ingress:
   enabled: true
-  ingressClassName: "nginx-ingress"
+  className: "nginx-ingress"
   hosts:
     - host: princeton-manifold-friends.notch8.cloud
       paths:
@@ -135,6 +140,10 @@ postgresql:
   containerPorts:
     postgresql: 5432
   primary:
+    podAnnotations:
+      pre.hook.backup.velero.io/container: postgresql
+      pre.hook.backup.velero.io/timeout: 10m
+      pre.hook.backup.velero.io/command: '["/bin/bash","-c","mkdir -p /bitnami/postgresql/backup && PGPASSWORD=${DOLLAR}POSTGRES_PASSWORD pg_dump -h 127.0.0.1 -U ${DOLLAR}POSTGRES_USER -Fc -f /bitnami/postgresql/backup/${DOLLAR}{POSTGRES_DB}.dump.tmp ${DOLLAR}POSTGRES_DB && mv -f /bitnami/postgresql/backup/${DOLLAR}{POSTGRES_DB}.dump.tmp /bitnami/postgresql/backup/${DOLLAR}{POSTGRES_DB}.dump"]'
     resources:
       limits:
         memory: "1Gi"

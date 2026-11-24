@@ -2,6 +2,8 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ include "princeton-manifold.fullname" . }}-shared-pvc
+  annotations:
+    helm.sh/resource-policy: keep
   labels:
     {{- include "princeton-manifold.labels" . | nindent 4 }}
 spec:
